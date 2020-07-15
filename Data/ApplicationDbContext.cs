@@ -16,5 +16,6 @@ namespace MyRestaurant.Data
         public DbSet<MyRestaurant.Models.Category> Category { get; set; }
         public DbSet<MyRestaurant.Models.SubCategory> SubCategory { get; set; }
         public DbSet<MyRestaurant.Models.FoodItem> FoodItem { get; set; }
+        public DbSet<MyRestaurant.Models.Coupon> Coupon { get; set; }
     }
 }
