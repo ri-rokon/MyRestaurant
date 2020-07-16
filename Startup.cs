@@ -63,11 +63,12 @@ namespace MyRestaurant
 
                 endpoints.MapControllerRoute(
                     name: "Area",
-                    pattern: "{area=Customer}/{controller=Home}/{action=Index}",
-                    defaults: new { Area = "Customer", Controller = "Home", Action = "Index" }
-
+                    pattern: "{area=Consumer}/{controller=Home}/{action=Index}",
+                    defaults: new { Area = "Consumer", Controller = "Home", Action = "Index" }
                     );
 
+
+            
 
                 endpoints.MapControllerRoute(
                   name: "NoArea",
