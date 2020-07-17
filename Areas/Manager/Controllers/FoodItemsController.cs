@@ -156,8 +156,9 @@ namespace MyRestaurant.Areas.Manager.Controllers
                     var upload = Path.Combine(webRootPath, "images");
                     var extention = Path.GetExtension(files[0].FileName);
                     var imagePath = Path.Combine(upload, foodItem.Id + extention);
-                    
-                    if(System.IO.File.Exists(imagePath))
+                    var DeleteImagePath = Path.Combine(upload, foodItem.Id + ".png");
+
+                    if (System.IO.File.Exists(imagePath))
                     {
                         System.IO.File.Delete(imagePath);
                     }
