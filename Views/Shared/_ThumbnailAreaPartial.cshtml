@@ -13,23 +13,31 @@
             <div class="border border-info rounded col-12" style="margin-bottom:10px; margin-top:10px; padding:10px">
                 <div class="row">
 
-                    <div class="col-md-3 col-sm-12">
-                        <img src="@item.Image" width="50%" style="border-radius:5px; border:5px solid #bbb9b9" alt="Alternate Text" />
+                    <div class="col-md-2 col-sm-12">
+                        <img src="@item.Image"  style="border-radius:5px; width:80%; border:5px solid #bbb9b9;" alt="Alternate Text" />
                     </div>
-                    <div class="col-md-9 col-sm-12">
+                    <div class="col-md-10 col-sm-12">
                         <div class="row pr-3">
                             <div class="col-8">
                                 <label class="text-primary" style="font-size:21px;color:magenta">@item.Name</label>
                             </div>
-                            <div class="col-4">
-
+                            <div class="col-4 text-right" style="color:maroon">
+                                <h4>৳ @item.Price</h4>
                             </div>
                         </div>
+                        
+                        <div class="row col-12 text-justify d-none d-md-block">
+                            <p>@item.Description</p>
+                        </div>
+                        <div class="col-md-2 col-sm-12 offset-10 text-center">
+                            <a class="btn btn-info form-control" asp-route-Id="@item.Id" asp-action="Details">Details</a>
+                        </div>
                     </div>
-
+                    
                 </div>
             </div>
 
         }
+        <div class="p-4"></div>
     </div>
 }
