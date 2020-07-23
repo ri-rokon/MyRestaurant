@@ -11,7 +11,7 @@ namespace MyRestaurant.Utility
         public const string ManagerUser = "Manager";
         public const string FrontDeskUser = "FrontDesk";
         public const string ConsumerUser = "Consumer";
-        public const string CookerUser = "Cookrt";
+        public const string CookerUser = "Cooker";
 
     }
 }

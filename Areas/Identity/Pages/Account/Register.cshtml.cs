@@ -84,6 +84,7 @@ namespace MyRestaurant.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            string role = Request.Form["rdUserRole"].ToString();
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
@@ -123,7 +124,34 @@ namespace MyRestaurant.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(StaticItems.ConsumerUser));
                     }
 
-                    await _userManager.AddToRoleAsync(user, StaticItems.ManagerUser);
+                    if(role==StaticItems.CookerUser)
+                    {
+                        await _userManager.AddToRoleAsync(user, StaticItems.CookerUser);
+
+                    }
+                    else
+                    {
+                        if (role == StaticItems.FrontDeskUser)
+                        {
+                            await _userManager.AddToRoleAsync(user, StaticItems.FrontDeskUser);
+
+                        }
+                        else
+                        {
+                            if (role == StaticItems.ManagerUser)
+                            {
+                                await _userManager.AddToRoleAsync(user, StaticItems.ManagerUser);
+
+                            }
+                            else
+                            {
+                                await _userManager.AddToRoleAsync(user, StaticItems.ConsumerUser);
+
+                            }
+
+                        }
+                    }
+
 
                     _logger.LogInformation("User created a new account with password.");
 

@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - MyRestaurant</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
@@ -24,6 +26,18 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Management
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-area="Manager" asp-controller="Categories" asp-action="Index">Category</a>
+                                <a class="dropdown-item" asp-area="Manager" asp-controller="SubCategories" asp-action="Index">Sub Category</a>
+                                <a class="dropdown-item" asp-area="Manager" asp-controller="FoodItems" asp-action="Index">Food Item</a>
+                                <a class="dropdown-item" asp-area="Manager" asp-controller="Coupons" asp-action="Index">Coupon</a>
+                                <a class="dropdown-item" asp-area="Manager" asp-controller="Users" asp-action="Index">Coupon</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
