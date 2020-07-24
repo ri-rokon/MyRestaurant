@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace MyRestaurant.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger,ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
             _context = context;
@@ -30,13 +31,26 @@ namespace MyRestaurant.Controllers
             {
                 FoodItem = await _context.FoodItem.Include(f => f.Category).Include(f => f.SubCategory).ToListAsync(),
                 Category = await _context.Category.ToListAsync(),
-                Coupon=await _context.Coupon.Where(c=>c.IsActive==true).ToListAsync()
+                Coupon = await _context.Coupon.Where(c => c.IsActive == true).ToListAsync()
 
 
 
             };
             return View(IndexViewModel);
         }
+
+        public async Task<IActionResult> Details (int id)
+        {
+            var FoodItemDb = await _context.FoodItem.Include(f => f.Category).Include(f => f.SubCategory).FirstOrDefaultAsync(f => f.Id == id);
+            Cart CartObj = new Cart()
+            {
+                FoodItem = FoodItemDb,
+                FoodItemId = FoodItemDb.Id
+
+            };
+            return View(CartObj);
+        }
+
 
         public IActionResult Privacy()
         {
