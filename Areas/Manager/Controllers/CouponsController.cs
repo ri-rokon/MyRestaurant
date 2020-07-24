@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using MyRestaurant.Models;
 
 namespace MyRestaurant.Areas.Manager.Controllers
 {
+    [Authorize(Roles = Utility.StaticItems.ManagerUser)]
+
     [Area("Manager")]
     public class CouponsController : Controller
     {

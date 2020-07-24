@@ -29,22 +29,33 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                <a class="btn btn-success text-white" asp-action="Lock" asp-route-id="@item.Id">
-                    <i class="fa fa-lock" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                    {
+                        <a class="btn btn-success text-white" asp-action="Lock" asp-route-id="@item.Id">
+                            <i class="fa fa-lock-open" aria-hidden="true"></i>
+                        </a>
+
+                    }
+                    else
+                    {
+                        <a class="btn btn-success text-white" asp-action="UnLock" asp-route-id="@item.Id">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </a>
+                    }
+
+                </td>
+            </tr>
         }
     </tbody>
 </table>

@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyRestaurant.Data;
 using MyRestaurant.Models;
+using MyRestaurant.Utility;
 
 namespace MyRestaurant.Areas.Manager.Controllers
 {
+    [Authorize(Roles = StaticItems.ManagerUser)]
+
     [Area("Manager")]
     public class SubCategoriesController : Controller
     {
