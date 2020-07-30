@@ -77,26 +77,26 @@
 
     <script>
 
-    var posts = $('.post');
+        var posts = $('.post');
 
-    (function ($) {
+        (function ($) {
 
-        $("#menu-filters li").click(function () {
-            $("#menu-filters li").removeClass('active btn btn-secondary');
-            $(this).addClass('active btn btn-secondary');
+            $("#menu-filters li").click(function () {
+                $("#menu-filters li").removeClass('active btn btn-secondary');
+                $(this).addClass('active btn btn-secondary');
 
-            var selectedFilter = $(this).data("filter");
+                var selectedFilter = $(this).data("filter");
 
-            $(".menu-restaurant").fadeOut();
+                $(".menu-restaurant").fadeOut();
 
-            setTimeout(function () {
-                $(selectedFilter).slideDown();
-            }, 300);
-        });
+                setTimeout(function () {
+                    $(selectedFilter).slideDown();
+                }, 300);
+            });
 
 
 
-    })(jQuery);
+        })(jQuery);
 
     </script>
 }

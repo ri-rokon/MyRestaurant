@@ -10,8 +10,8 @@ using MyRestaurant.Data;
 namespace MyRestaurant.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200724042105_CartTableAddInDatabase")]
-    partial class CartTableAddInDatabase
+    [Migration("20200726063852_AddCartItemTableToDatabase")]
+    partial class AddCartItemTableToDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,15 +227,15 @@ namespace MyRestaurant.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("MyRestaurant.Models.Cart", b =>
+            modelBuilder.Entity("MyRestaurant.Models.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -245,7 +245,7 @@ namespace MyRestaurant.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cart");
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("MyRestaurant.Models.Category", b =>

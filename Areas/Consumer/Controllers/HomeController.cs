@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using AspNetCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,12 +18,12 @@ namespace MyRestaurant.Controllers
     [Area("Consumer")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+      //  private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        //ILogger<HomeController> logger,
+        public HomeController( ApplicationDbContext context)
         {
-            _logger = logger;
+           // _logger = logger;
             _context = context;
         }
 
@@ -36,19 +38,73 @@ namespace MyRestaurant.Controllers
 
 
             };
-            return View(IndexViewModel);
+            var claimIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if(claim !=null)
+            {
+                var cnt = _context.CartItem.Where(c => c.ApplicationUserId == claim.Value).ToList().Count;
+                HttpContext.Session.SetInt32("ssCount", cnt);
+            }
+             return View(IndexViewModel);
         }
-
-        public async Task<IActionResult> Details (int id)
+        public async Task<IActionResult> Details(int id)
         {
             var FoodItemDb = await _context.FoodItem.Include(f => f.Category).Include(f => f.SubCategory).FirstOrDefaultAsync(f => f.Id == id);
-            Cart CartObj = new Cart()
+            
+            CartItem cartItem=new CartItem()
             {
                 FoodItem = FoodItemDb,
                 FoodItemId = FoodItemDb.Id
 
             };
-            return View(CartObj);
+            return View(cartItem);
+
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Details(CartItem cartObj)
+        {
+            cartObj.Id = 0;
+            if (ModelState.IsValid)
+            {
+                var claimIdentity = (ClaimsIdentity)this.User.Identity;
+                var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                cartObj.ApplicationUserId = claim.Value;
+
+                CartItem cartItemFromDb = await _context.CartItem.FirstOrDefaultAsync(c => c.ApplicationUserId == cartObj.ApplicationUserId && c.FoodItemId==cartObj.FoodItemId);
+                if (cartItemFromDb == null)
+                {
+                    await _context.CartItem.AddAsync(cartObj);
+                }
+                else
+                {
+                    cartItemFromDb.Count = cartItemFromDb.Count + cartObj.Count;
+                }
+                await _context.SaveChangesAsync();
+                var count= _context.CartItem.Where(c=>c.ApplicationUserId==cartObj.ApplicationUserId).Count();
+                HttpContext.Session.SetInt32("ssCount", count);
+                return RedirectToAction("Index")  ;
+
+
+
+            }
+            else
+            {
+                var FoodItemDb = await _context.FoodItem.Include(f => f.Category).Include(f => f.SubCategory).FirstOrDefaultAsync(f => f.Id == cartObj.Id);
+
+                CartItem cartItem = new CartItem()
+                {
+                    FoodItem = FoodItemDb,
+                    FoodItemId = FoodItemDb.Id
+
+                };
+                return View(cartItem);
+
+            }
+
+
+
         }
 
 

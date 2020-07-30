@@ -176,9 +176,12 @@ namespace MyRestaurant.Areas.Manager.Controllers
                 }
                 else
                 {
-                    var newImageName = @"\images\" + foodItem.Id + ".png";
-                    foodItem.Image = newImageName;
-                    _context.Update(foodItem);                    
+                    var itemFromDb = await _context.FoodItem.FirstOrDefaultAsync(f => f.Id == id);
+                    itemFromDb.Name = foodItem.Name;
+                    itemFromDb.Description =foodItem.Description;
+                    itemFromDb.Price = foodItem.Price;
+                    itemFromDb.CategoryId = foodItem.CategoryId;
+                    itemFromDb.SubCategoryId = foodItem.SubCategoryId;                   
                     
                 }
 

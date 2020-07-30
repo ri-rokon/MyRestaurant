@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MyRestaurant.Data;
+using Microsoft.EntityFrameworkCore;
+using MyRestaurant.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace MyRestaurant.Areas.Identity.Pages.Account
 {
@@ -20,14 +24,17 @@ namespace MyRestaurant.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly ApplicationDbContext _context;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -82,6 +89,9 @@ namespace MyRestaurant.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == Input.Email);
+                    List<CartItem> lastShopping = await _context.CartItem.Where(c => c.ApplicationUserId == currentUser.Id).ToListAsync();
+                    HttpContext.Session.SetInt32("ssCount", lastShopping.Count);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
