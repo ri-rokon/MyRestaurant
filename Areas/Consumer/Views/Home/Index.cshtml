@@ -46,10 +46,12 @@
 
 <div class="container">
     <ul id="menu-filters" class="menu-filter-list list-inline text-center">
-        <li class="filter active btn btn-secondary ml-1 mr-1" data-filter="menu-restaurant">show all</li>
+        <li class="filter active btn btn-secondary ml-1 mr-1"  data-filter=".menu-restaurant">show all</li>
         @foreach (var item in Model.Category)
         {
-            <li class="filter  ml-1 mr-1" data-filter="@item.Name.Replace(" ",String.Empty)">@item.Name</li>
+            //class="filter  ml-1 mr-1" data-filter="@item.Name.Replace(" ",String.Empty)"
+           
+            <li class="ml-1 mr-1" data-filter=".@item.Name.Replace(" ",String.Empty)">@item.Name</li>
 
         }
     </ul>
@@ -77,7 +79,6 @@
 
     <script>
 
-        var posts = $('.post');
 
         (function ($) {
 
