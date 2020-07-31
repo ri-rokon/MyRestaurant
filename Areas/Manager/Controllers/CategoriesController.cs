@@ -152,6 +152,7 @@ namespace MyRestaurant.Areas.Manager.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Category.Any(e => e.Id == id);
+           
         }
     }
 }
