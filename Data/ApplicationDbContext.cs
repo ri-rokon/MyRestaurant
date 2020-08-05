@@ -19,6 +19,8 @@ namespace MyRestaurant.Data
         public DbSet<MyRestaurant.Models.Coupon> Coupon { get; set; }
         public DbSet<MyRestaurant.Models.ApplicationUser> ApplicationUser { get; set; }
         public DbSet<MyRestaurant.Models.CartItem> CartItem { get; set; }
+        public DbSet<MyRestaurant.Models.OrderHeader> OrderHeader { get; set; }
+        public DbSet<MyRestaurant.Models.OrderDetails> OrderDetails { get; set; }
 
     }
 }
