@@ -56,6 +56,14 @@ namespace MyRestaurant.Areas.Consumer.Controllers
                 }
             }
             detailCart.OrderHeader.TotalOrderOriginal = detailCart.OrderHeader.TotalOrder;
+            if(HttpContext.Session.GetString(StaticItems.ssCouponCode)!=null)
+            {
+                detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(StaticItems.ssCouponCode);
+                var couponFromDb = await _context.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
+                detailCart.OrderHeader.TotalOrder = StaticItems.DiscountedPrice(couponFromDb, detailCart.OrderHeader.TotalOrderOriginal);
+            }
+
+            
             return View(detailCart);
 
         }
@@ -99,6 +107,22 @@ namespace MyRestaurant.Areas.Consumer.Controllers
             var cnt = _context.CartItem.Where(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
             HttpContext.Session.SetInt32("ssCount", cnt);
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public IActionResult AddCoupon()
+        {
+            if (detailCart.OrderHeader.CouponCode == null)
+            {
+                detailCart.OrderHeader.CouponCode = "";
+            }
+             
+            HttpContext.Session.SetString(StaticItems.ssCouponCode, detailCart.OrderHeader.CouponCode);
+            return RedirectToAction(nameof(Index));
+            
+            
+        
+        
         }
 
     }
