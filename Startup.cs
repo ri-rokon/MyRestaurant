@@ -12,6 +12,8 @@ using MyRestaurant.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyRestaurant.Utility;
+using Stripe;
 
 namespace MyRestaurant
 {
@@ -34,6 +36,9 @@ namespace MyRestaurant
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+            
             services.AddDistributedMemoryCache();
             services.AddSession(option=> {
                 option.Cookie.IsEssential = true;
@@ -63,7 +68,7 @@ namespace MyRestaurant
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["Secretkey"];
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();

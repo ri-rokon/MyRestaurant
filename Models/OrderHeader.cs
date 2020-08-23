@@ -17,6 +17,9 @@ namespace MyRestaurant.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         [Required]
+        public DateTime OrderDate { get; set; }
+
+        [Required]
         public double TotalOrderOriginal { get; set; }
 
         [Required]

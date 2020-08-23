@@ -58,18 +58,29 @@ namespace MyRestaurant.Areas.Manager.Controllers
         }
 
         // POST: Manager/SubCategories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,CategoryID")] SubCategory subCategory)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(subCategory);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var subcategoryFromDb = await _context.SubCategory.Include(s=>s.Category).FirstOrDefaultAsync(s => s.Name == subCategory.Name.Trim());
+                if (subcategoryFromDb == null)
+                {
+                    _context.Add(subCategory);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else {
+                    ViewBag.StatusMessage = "Error : Sub Category exists under " + subcategoryFromDb.Category.Name + " category. Please use another name.";
+                    ViewData["CategoryID"] = new SelectList(_context.Category, "Id", "Name", subCategory.CategoryID);
+                    return View(subCategory);
+
+                }
+
+
             }
+
             ViewData["CategoryID"] = new SelectList(_context.Category, "Id", "Name", subCategory.CategoryID);
             return View(subCategory);
         }
