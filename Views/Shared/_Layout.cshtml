@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+@using MyRestaurant.Utility
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.IsInRole(MyRestaurant.Utility.StaticItems.ManagerUser))
+                        @if (User.IsInRole(StaticItems.ManagerUser))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,6 +48,37 @@
                                 </div>
                             </li>
                         }
+
+                        @if (User.IsInRole(StaticItems.ManagerUser) || User.IsInRole(StaticItems.ConsumerUser) || User.IsInRole(StaticItems.FrontDeskUser) || User.IsInRole(StaticItems.CookerUser))
+                        {
+                            <li class="nav-item">
+                                <a asp-area="Consumer" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
+                                    Order History
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole(StaticItems.FrontDeskUser) || User.IsInRole(StaticItems.CookerUser) || User.IsInRole(StaticItems.ManagerUser))
+                        {
+                            <li class="nav-item dropdown text-white-50">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Order
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                    @if (User.IsInRole(StaticItems.CookerUser) || User.IsInRole(StaticItems.ManagerUser))
+                                    {
+                                        <a class="dropdown-item" asp-action="ManageOrder" asp-controller="Order" asp-area="Consumer">Manage Order</a>
+                                    }
+                                    @if (User.IsInRole(StaticItems.FrontDeskUser) || User.IsInRole(StaticItems.ManagerUser))
+                                    {
+                                        <a class="dropdown-item" asp-action="OrderPickup" asp-controller="Order" asp-area="Consumer">Order Pickup</a>
+                                    }
+                                </div>
+
+                            </li>
+                        }
+
+
                         @{
                             var count = HttpContextAccessor.HttpContext.Session.GetInt32("ssCount");
                         }

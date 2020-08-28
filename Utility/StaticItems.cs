@@ -13,6 +13,8 @@ namespace MyRestaurant.Utility
         public const string FrontDeskUser = "FrontDesk";
         public const string ConsumerUser = "Consumer";
         public const string CookerUser = "Cooker";
+
+
         public const string ssCouponCode = "ssCouponCode";
         public const string ssShoppingCartCount = "ssCartCount";
 
