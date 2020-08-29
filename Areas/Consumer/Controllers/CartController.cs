@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,14 @@ namespace MyRestaurant.Areas.Consumer.Controllers
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
         [BindProperty]
         public OrderDetailsCart detailCart { get; set; }
-        public CartController(ApplicationDbContext context)
+        public CartController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         public async Task<IActionResult> Index()
@@ -254,6 +257,8 @@ namespace MyRestaurant.Areas.Consumer.Controllers
 
             if (charge.Status.ToLower() == "succeeded")
             {
+                //Email For Successfull Order
+                await _emailSender.SendEmailAsync(_context.Users.Where(u => u.Id == claim.Value).FirstOrDefault().Email, "MyRestaurant -Order Create " + detailCart.OrderHeader.Id.ToString(), "Order Has been Submitted Succesfully");
                 detailCart.OrderHeader.PaymentStatus = StaticItems.PaymentStatusApproved;
                 detailCart.OrderHeader.Status = StaticItems.StatusSubmitted;
             }

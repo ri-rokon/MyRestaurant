@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyRestaurant.Utility;
 using Stripe;
+using MyRestaurant.Service;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace MyRestaurant
 {
@@ -37,7 +39,10 @@ namespace MyRestaurant
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+            services.AddSingleton< IEmailSender , EmailSender> ();
+            services.Configure<EmailOptions>(Configuration);
             
             services.AddDistributedMemoryCache();
             services.AddSession(option=> {
@@ -48,10 +53,17 @@ namespace MyRestaurant
             });
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "343191200203563";
+                //facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = "f53426820deea684f41edb59a8581416";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -69,6 +81,7 @@ namespace MyRestaurant
 
             app.UseRouting();
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["Secretkey"];
+            dbInitializer.Initialize();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();

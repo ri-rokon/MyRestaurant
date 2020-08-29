@@ -104,25 +104,7 @@ namespace MyRestaurant.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    if(!await _roleManager.RoleExistsAsync(StaticItems.ManagerUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(StaticItems.ManagerUser));
-                    }
-
-                    if (!await _roleManager.RoleExistsAsync(StaticItems.CookerUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(StaticItems.CookerUser));
-                    }
-
-                    if (!await _roleManager.RoleExistsAsync(StaticItems.FrontDeskUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(StaticItems.FrontDeskUser));
-                    }
-
-                    if (!await _roleManager.RoleExistsAsync(StaticItems.ConsumerUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(StaticItems.ConsumerUser));
-                    }
+                    
 
                     if(role==StaticItems.CookerUser)
                     {
