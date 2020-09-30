@@ -88,26 +88,19 @@ namespace MyRestaurant
             app.UseEndpoints(endpoints =>
             {
 
-                endpoints.MapControllerRoute(
-                    name: "Area",
-                    pattern: "{area=Consumer}/{controller=Home}/{action=Index}",
-                    defaults: new { Area = "Consumer", Controller = "Home", Action = "Index" }
-                    );
+                //endpoints.MapControllerRoute(
+                //    name: "Area",
+                //    pattern: "{area=Consumer}/{controller=Home}/{action=Index}",
+                //    defaults: new { Area = "Consumer", Controller = "Home", Action = "Index" }
+                //    );
 
 
             
 
                 endpoints.MapControllerRoute(
-                  name: "NoArea",
-                  pattern: "{controller}/{action}/{ id?}",
-
-                  defaults: new { Controller = "Home", Action = "Index" }
-                  );
-
-
-                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Consumer}/{controller=Home}/{action=Index}/{id?}");
+               
 
 
                 endpoints.MapRazorPages();

@@ -1,0 +1,68 @@
+﻿@model List<MyRestaurant.ViewModel.Division>
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <label><b>Divition</b></label>
+        <select id="divList" class="form-control">
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            }
+        </select>
+        <br />
+        <label><b>Discrict</b></label>
+        <select id="distList" class="form-control">
+                      
+        </select>
+
+
+    </div>
+
+</div>
+
+
+@section Scripts{ 
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#divList').change(function () {
+
+                var value = $('#divList').val();
+                alert('its' + value);
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Content("~/")' + "Manager/Test/GetDistrict/"+value,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#distList').empty();
+
+                        console.log(data);
+                        $.each(data.mydata, function (i, obj) {
+                           let items = '<option>' + obj + '</option>';
+                            $('#distList').append(items);
+
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err);
+
+                    }
+
+                });
+            });
+
+        });
+
+
+    </script>
+       
+
+}

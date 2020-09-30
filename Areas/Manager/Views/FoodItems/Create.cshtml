@@ -56,12 +56,23 @@
 
 
     <script type="text/javascript">
+import { get } from "jquery";
+
         $(document).ready(function () {
 
             getSubCategory();
             $('#CategoryId').change(function () {
                 getSubCategory();
             });
+        });
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Content("~")' + "Manager/FoodItems/GetSubCategory",
+            dataType: "JSON",
+            data:
+
+
         });
 
 
